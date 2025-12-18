@@ -14,17 +14,57 @@ export default function App() {
 
   useEffect(() => {
     socket.current = connectWS();
-    socket.current.on("connect", () => {
-      socket.current.on("roomNotice", (userName) => {
-        console.log(`${userName} joined the group chat`);
-      });
-    });
-    socket.current.on("chatMessage", (msg) => {
-      //push incoming message to state
-      console.log("message", msg);
+
+    const handleRoomNotice = (userName) => {
+      console.log(`${userName} joined to group!`);
+    };
+
+    const handleChatMessage = (msg) => {
+      console.log("msg", msg);
       setMessages((prev) => [...prev, msg]);
-    });
+    };
+
+    const handleTyping = (userName) => {
+      setTypers((prev) => {
+        const isExist = prev.find((typer) => typer === userName);
+        if (!isExist) {
+          return [...prev, userName];
+        }
+        return prev;
+      });
+    };
+
+    const handleStopTyping = (userName) => {
+      setTypers((prev) => prev.filter((typer) => typer !== userName));
+    };
+
+    socket.current.on("roomNotice", handleRoomNotice);
+    socket.current.on("chatMessage", handleChatMessage);
+    socket.current.on("typing", handleTyping);
+    socket.current.on("stopTyping", handleStopTyping);
+
+    return () => {
+      socket.current.off("roomNotice", handleRoomNotice);
+      socket.current.off("chatMessage", handleChatMessage);
+      socket.current.off("typing", handleTyping);
+      socket.current.off("stopTyping", handleStopTyping);
+    };
   }, []);
+
+  useEffect(() => {
+    if (text) {
+      socket.current.emit("typing", userName);
+      clearTimeout(timer.current);
+    }
+
+    timer.current = setTimeout(() => {
+      socket.current.emit("stopTyping", userName);
+    }, 1000);
+
+    return () => {
+      clearTimeout(timer.current);
+    };
+  }, [text, userName]);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
   function formatTime(ts) {

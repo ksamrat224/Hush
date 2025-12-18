@@ -1,4 +1,10 @@
 import { io } from "socket.io-client";
+
+let socket = null;
+
 export function connectWS() {
-  return io("http://localhost:4600");
+  if (!socket) {
+    socket = io("http://localhost:4600");
+  }
+  return socket;
 }
