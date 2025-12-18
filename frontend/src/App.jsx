@@ -19,6 +19,11 @@ export default function App() {
         console.log(`${userName} joined the group chat`);
       });
     });
+    socket.current.on("chatMessage", (msg) => {
+      //push incoming message to state
+      console.log("message", msg);
+      setMessages((prev) => [...prev, msg]);
+    });
   }, []);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES

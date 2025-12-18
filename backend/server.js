@@ -25,6 +25,10 @@ io.on("connection", (socket) => {
 
     socket.to(ROOM).emit("roomNotice", userName);
   });
+
+  socket.on("chatMessage", (msg) => {
+    socket.to(ROOM).emit("chatMessage", msg);
+  });
 });
 
 server.listen(4600, () => {
