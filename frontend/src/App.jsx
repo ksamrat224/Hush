@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { connectWS } from "./ws.";
 
 export default function App() {
   const timer = useRef(null);
@@ -10,6 +11,10 @@ export default function App() {
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
+
+  useEffect(() => {
+   socket.current = connectWS();
+  }, []);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
   function formatTime(ts) {
@@ -24,8 +29,6 @@ export default function App() {
     e.preventDefault();
     const trimmed = inputName.trim();
     if (!trimmed) return;
-
-  
 
     setUserName(trimmed);
     setShowNamePopup(false);
