@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 
-
 export default function App() {
   const timer = useRef(null);
   const socket = useRef(null);
@@ -11,10 +10,6 @@ export default function App() {
 
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
-
- 
-
- 
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
   function formatTime(ts) {
@@ -30,8 +25,7 @@ export default function App() {
     const trimmed = inputName.trim();
     if (!trimmed) return;
 
-    // join room
-    socket.current.emit("joinRoom", trimmed);
+  
 
     setUserName(trimmed);
     setShowNamePopup(false);
