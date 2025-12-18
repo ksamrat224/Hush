@@ -14,9 +14,14 @@ const io = new Server(server, {
 app.get("/", (req, res) => {
   res.send("<h1>Hello world</h1>");
 });
-
+const ROOM = "group";
 io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
+
+  socket.on("joinRoom", async (userName) => {
+    console.log(`${userName} joined the chat`);
+    await socket.join(ROOM);
+  });
 });
 
 server.listen(4600, () => {

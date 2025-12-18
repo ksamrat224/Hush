@@ -13,7 +13,8 @@ export default function App() {
   const [text, setText] = useState("");
 
   useEffect(() => {
-   socket.current = connectWS();
+    socket.current = connectWS();
+    socket.current.on("current", () => {});
   }, []);
 
   // FORMAT TIMESTAMP TO HH:MM FOR MESSAGES
@@ -29,6 +30,8 @@ export default function App() {
     e.preventDefault();
     const trimmed = inputName.trim();
     if (!trimmed) return;
+    //join room
+    socket.current.emit("joinRoom", trimmed);
 
     setUserName(trimmed);
     setShowNamePopup(false);
