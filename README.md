@@ -71,7 +71,7 @@ websocket/
 1. **Clone the repository**
 
 ```bash
-git clone https://github.com/ksamrat224/chat.git
+git clone https://github.com/ksamrat224/Hush.git
 cd chat
 ```
 
